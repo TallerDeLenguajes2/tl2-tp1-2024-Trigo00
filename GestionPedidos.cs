@@ -53,7 +53,7 @@ public class GestionPedidos
         } while (opcion != "7");
     }
 
-    private void DarDeAltaPedido()
+    public void DarDeAltaPedido()
     {
         Console.Write("Ingrese el número del pedido: ");
         int nroPedido = int.Parse(Console.ReadLine());
@@ -86,35 +86,7 @@ public class GestionPedidos
         }
     }
 
-    private void AsignarPedidoACadete()
-    {
-        Console.Write("Ingrese el número del pedido a asignar: ");
-        int nroPedido = int.Parse(Console.ReadLine());
-        Pedido pedido = BuscarPedidoPorNumero(nroPedido);
-
-        if (pedido != null)
-        {
-            Console.Write("Ingrese el ID del cadete al que se le asignará el pedido: ");
-            int idCadete = int.Parse(Console.ReadLine());
-            Cadete cadete = miCadeteria.ListadoCadetes.FirstOrDefault(c => c.Id == idCadete);
-
-            if (cadete != null)
-            {
-                cadete.AgregarPedido(pedido);
-                Console.WriteLine("Pedido asignado exitosamente al cadete.");
-            }
-            else
-            {
-                Console.WriteLine("Cadete no encontrado.");
-            }
-        }
-        else
-        {
-            Console.WriteLine("Pedido no encontrado.");
-        }
-    }
-
-    private void CambiarEstadoPedido()
+    public void CambiarEstadoPedido()
     {
         Console.Write("Ingrese el número del pedido: ");
         int nroPedido = int.Parse(Console.ReadLine());
@@ -148,7 +120,7 @@ public class GestionPedidos
         }
     }
 
-    private void ReasignarPedido()
+    public void ReasignarPedido()
     {
         Console.Write("Ingrese el número del pedido a reasignar: ");
         int nroPedido = int.Parse(Console.ReadLine());
@@ -181,14 +153,14 @@ public class GestionPedidos
         }
     }
 
-    private Pedido BuscarPedidoPorNumero(int nroPedido)
+    public static Pedido BuscarPedidoPorNumero(int idPedido, Cadeteria miCadeteria)
     {
-        foreach (var cadete in miCadeteria.ListadoCadetes)
+        foreach (var miPedido in miCadeteria.ListadoPedidos)
         {
-            Pedido pedido = cadete.ListadoPedidos.FirstOrDefault(p => p.Nro == nroPedido);
-            if (pedido != null)
-            {
-                return pedido;
+            if(miPedido.Nro == idPedido){
+                return miPedido;
+            }else{
+                return null;
             }
         }
         return null;
