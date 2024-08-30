@@ -29,7 +29,11 @@ public class GestionPedidos
                     DarDeAltaPedido();
                     break;
                 case "2":
-                    AsignarPedidoACadete();
+                    Console.Write("Ingrese el ID del pedido: ");
+                    int idPedido = int.Parse(Console.ReadLine());
+                    Console.Write("Ingrese el ID del cadete al que quiere agregar el pedido: ");
+                    int idCadete = int.Parse(Console.ReadLine());
+                    miCadeteria.AsignarPedidoACadete(idCadete, idPedido);
                     break;
                 case "3":
                     CambiarEstadoPedido();
@@ -77,7 +81,7 @@ public class GestionPedidos
 
         if (cadete != null)
         {
-            cadete.AgregarPedido(nuevoPedido);
+            cadete.AgregarPedido(nuevoPedido, miCadeteria);
             Console.WriteLine("Pedido asignado exitosamente al cadete.");
         }
         else
@@ -90,7 +94,7 @@ public class GestionPedidos
     {
         Console.Write("Ingrese el número del pedido: ");
         int nroPedido = int.Parse(Console.ReadLine());
-        Pedido pedido = BuscarPedidoPorNumero(nroPedido);
+        Pedido pedido = BuscarPedidoPorNumero(nroPedido, miCadeteria);
 
         if (pedido != null)
         {
@@ -124,7 +128,7 @@ public class GestionPedidos
     {
         Console.Write("Ingrese el número del pedido a reasignar: ");
         int nroPedido = int.Parse(Console.ReadLine());
-        Pedido pedido = BuscarPedidoPorNumero(nroPedido);
+        Pedido pedido = BuscarPedidoPorNumero(nroPedido, miCadeteria);
 
         if (pedido != null)
         {
@@ -134,12 +138,12 @@ public class GestionPedidos
 
             if (nuevoCadete != null)
             {
-                var cadeteAnterior = miCadeteria.ListadoCadetes.FirstOrDefault(c => c.TienePedido(pedido));
+                var cadeteAnterior = miCadeteria.ListadoCadetes.FirstOrDefault(c => c.TienePedido(pedido, miCadeteria));
                 if (cadeteAnterior != null)
                 {
-                    cadeteAnterior.EliminarPedido(pedido);
+                    cadeteAnterior.EliminarPedido(pedido, miCadeteria);
                 }
-                nuevoCadete.AgregarPedido(pedido);
+                nuevoCadete.AgregarPedido(pedido, miCadeteria);
                 Console.WriteLine("Pedido reasignado exitosamente.");
             }
             else
@@ -184,7 +188,7 @@ public class GestionPedidos
             Console.WriteLine("Telefono: " + cadete.Telefono);
             Console.WriteLine("");
 
-            foreach (var pedido in cadete.ListadoPedidos)
+            foreach (var pedido in miCadeteria.ListadoPedidos)
             {
                 Console.WriteLine("Informacion del Pedido\n");
                 Console.WriteLine("Pedido Nro: " + pedido.Nro);
@@ -209,15 +213,21 @@ public class GestionPedidos
         // Calculo el monto ganado y la cantidad de envíos de cada cadete
         foreach (var cadete in miCadeteria.ListadoCadetes)
         {
-            int cantidadEnvios = cadete.ListadoPedidos.Count;
-            double montoGanado = cadete.JornalACobrar(); 
+            int cantidadEnvios = miCadeteria.ListadoPedidos.Count;
+            double montoGanado = miCadeteria.JornalACobrar(cadete.Id); 
             Console.WriteLine($"Cadete: {cadete.Nombre}");
             Console.WriteLine($"Cantidad de Envíos: {cantidadEnvios}");
             Console.WriteLine($"Monto Ganado: ${montoGanado}\n");
         }
 
         // Calculo el total de envíos de todos los cadetes
-        int totalEnvios = miCadeteria.ListadoCadetes.Sum(c => c.ListadoPedidos.Count);
+        int totalEnvios = 0;
+        foreach (var pedido in miCadeteria.ListadoPedidos)
+        {
+            if(pedido.EstadoPedido == Pedido.Estado.Entregado){
+                totalEnvios++;
+            }
+        }
 
         // Calculo el promedio de envíos por cadete
         double promedioEnvios = miCadeteria.ListadoCadetes.Count > 0 ? (double)totalEnvios / miCadeteria.ListadoCadetes.Count : 0;

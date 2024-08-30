@@ -45,7 +45,7 @@ public class Cadeteria
             foreach (var miCadete in miCadeteria.listadoCadetes)
             {
                 if(miCadete.Id == idCadete){
-                    miCadete.AgregarPedido(pedido);
+                    miCadete.AgregarPedido(pedido, miCadeteria);
                     bandera = 1;
                     Console.WriteLine("Pedido asignado exitosamente al cadete.");
                 }
