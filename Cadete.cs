@@ -6,6 +6,9 @@ public class Cadete
     private string direccion;
     private string telefono;
 
+    // Constructor sin parámetros requerido para la deserialización
+    public Cadete() { }
+
     public Cadete(int idC, string nombreC, string direccionC, string telefonoC)
     {
         Id = idC;

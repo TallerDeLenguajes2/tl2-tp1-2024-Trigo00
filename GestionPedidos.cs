@@ -1,6 +1,7 @@
 public class GestionPedidos
 {
     private Cadeteria miCadeteria;
+    private List<Pedido> pedidosSinAsignar; 
 
     public GestionPedidos(Cadeteria cadeteria)
     {
@@ -14,50 +15,54 @@ public class GestionPedidos
         {
             Console.WriteLine("\n=== Sistema de Gestión de Pedidos ===");
             Console.WriteLine("1. Dar de alta un pedido");
-            Console.WriteLine("2. Asignar pedido a cadete");
-            Console.WriteLine("3. Cambiar estado de pedido");
-            Console.WriteLine("4. Reasignar pedido a otro cadete");
-            Console.WriteLine("5. Mostrar info");
-            Console.WriteLine("6. Mostrar Informe");
-            Console.WriteLine("7. Salir");
+            Console.WriteLine("2. Mostrar Pedidos sin cadete");
+            Console.WriteLine("3. Asignar pedido a cadete");
+            Console.WriteLine("4. Cambiar estado de pedido");
+            Console.WriteLine("5. Reasignar pedido a otro cadete");
+            Console.WriteLine("6. Mostrar info");
+            Console.WriteLine("7. Mostrar Informe");
+            Console.WriteLine("8. Salir");
             Console.Write("Seleccione una opción: ");
             opcion = Console.ReadLine();
 
             switch (opcion)
             {
                 case "1":
-                    DarDeAltaPedido();
+                    pedidosSinAsignar = DarDeAltaPedido();
                     break;
                 case "2":
+                    MostrarPedidosSinAsignar(pedidosSinAsignar);
+                    break;
+                case "3":
                     Console.Write("Ingrese el ID del pedido: ");
                     int idPedido = int.Parse(Console.ReadLine());
                     Console.Write("Ingrese el ID del cadete al que quiere agregar el pedido: ");
                     int idCadete = int.Parse(Console.ReadLine());
                     miCadeteria.AsignarPedidoACadete(idCadete, idPedido);
                     break;
-                case "3":
+                case "4":
                     CambiarEstadoPedido();
                     break;
-                case "4":
+                case "5":
                     ReasignarPedido();
                     break;
-                case "5":
+                case "6":
                     MostrarPedidos();
                     break;
-                case "6":
+                case "7":
                     GenerarInforme();
                     break;
-                case "7":
+                case "8":
                     Console.WriteLine("Saliendo del sistema...");
                     break;
                 default:
                     Console.WriteLine("Opción no válida. Intente nuevamente.");
                     break;
             }
-        } while (opcion != "7");
+        } while (opcion != "8");
     }
 
-    public void DarDeAltaPedido()
+    private List<Pedido> DarDeAltaPedido()
     {
         Console.Write("Ingrese el número del pedido: ");
         int nroPedido = int.Parse(Console.ReadLine());
@@ -75,7 +80,14 @@ public class GestionPedidos
         Cliente nuevoCliente = new Cliente(nombreCliente, direccionCliente, telefonoCliente, referencia);
         Pedido nuevoPedido = new Pedido(nroPedido, observaciones, nuevoCliente, Pedido.Estado.Pendiente);
 
-        Console.Write("Ingrese el ID del cadete al que se le asignará el pedido: ");
+        List<Pedido> PedidosSinCadete = new List<Pedido>();
+        PedidosSinCadete.Add(nuevoPedido);
+
+        Console.WriteLine("Pedido tomado exitosamente.");
+
+        return PedidosSinCadete;
+
+        /*Console.Write("Ingrese el ID del cadete al que se le asignará el pedido: ");
         int idCadete = int.Parse(Console.ReadLine());
         Cadete cadete = miCadeteria.ListadoCadetes.FirstOrDefault(c => c.Id == idCadete);
 
@@ -87,7 +99,7 @@ public class GestionPedidos
         else
         {
             Console.WriteLine("Cadete no encontrado.");
-        }
+        }*/
     }
 
     public void CambiarEstadoPedido()
@@ -161,9 +173,12 @@ public class GestionPedidos
     {
         foreach (var miPedido in miCadeteria.ListadoPedidos)
         {
-            if(miPedido.Nro == idPedido){
+            if (miPedido.Nro == idPedido)
+            {
                 return miPedido;
-            }else{
+            }
+            else
+            {
                 return null;
             }
         }
@@ -206,7 +221,7 @@ public class GestionPedidos
         }
     }
 
-     private void GenerarInforme()
+    private void GenerarInforme()
     {
         Console.WriteLine("=== Informe de Pedidos - Fin de Jornada ===\n");
 
@@ -214,7 +229,7 @@ public class GestionPedidos
         foreach (var cadete in miCadeteria.ListadoCadetes)
         {
             int cantidadEnvios = miCadeteria.ListadoPedidos.Count;
-            double montoGanado = miCadeteria.JornalACobrar(cadete.Id); 
+            double montoGanado = miCadeteria.JornalACobrar(cadete.Id);
             Console.WriteLine($"Cadete: {cadete.Nombre}");
             Console.WriteLine($"Cantidad de Envíos: {cantidadEnvios}");
             Console.WriteLine($"Monto Ganado: ${montoGanado}\n");
@@ -224,7 +239,8 @@ public class GestionPedidos
         int totalEnvios = 0;
         foreach (var pedido in miCadeteria.ListadoPedidos)
         {
-            if(pedido.EstadoPedido == Pedido.Estado.Entregado){
+            if (pedido.EstadoPedido == Pedido.Estado.Entregado)
+            {
                 totalEnvios++;
             }
         }
@@ -236,4 +252,27 @@ public class GestionPedidos
         Console.WriteLine($"Total de Envíos: {totalEnvios}");
         Console.WriteLine($"Promedio de Envíos por Cadete: {promedioEnvios:F2}\n");
     }
+
+    public void MostrarPedidosSinAsignar(List<Pedido> Lista)
+    {
+
+        Console.WriteLine("\n//// Pedidos ////\n");
+        foreach (var pedido in Lista)
+        {
+            Console.WriteLine("Informacion del Pedido\n");
+            Console.WriteLine("Pedido Nro: " + pedido.Nro);
+            Console.WriteLine("Observacion del Pedido: " + pedido.Obs);
+            Console.WriteLine("");
+
+            Console.WriteLine("Informacion Cliente \n");
+            Console.WriteLine("Nombre: " + pedido.Cliente.Nombre);
+            Console.WriteLine("Direccion: " + pedido.Cliente.Direccion);
+            Console.WriteLine("Telefono: " + pedido.Cliente.Telefono);
+            Console.WriteLine("Alguna referencia para ubicar al cadete: " + pedido.Cliente.DatosReferenciaDireccion);
+            Console.WriteLine("\nEstado del Pedido: " + pedido.EstadoPedido);
+            Console.WriteLine("");
+        }
+
+    }
+
 }
