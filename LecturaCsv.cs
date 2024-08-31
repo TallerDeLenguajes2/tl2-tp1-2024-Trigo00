@@ -25,9 +25,6 @@ public class LecturaCsv
             {
                 string[] fila = linea.Split(separador);
 
-                // Creo instancia de Cliente
-                //Cliente cliente = new Cliente(fila[6], fila[7], fila[8], fila[9]);
-
                 int idCadete = int.Parse(fila[0]);
                 Cadete cadeteExistente = miCadeteria.ListadoCadetes.FirstOrDefault(c => c.Id == idCadete);
 
