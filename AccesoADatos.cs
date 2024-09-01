@@ -68,7 +68,7 @@ public class AccesoCSV : AccesoADatos
     }
 }
 
-// Clase derivada para acceso a JSON usando System.Text.Json
+// Clase derivada para acceso a JSON 
 public class AccesoJSON : AccesoADatos
 {
     public override Cadeteria CargarDatos(string archivoCadeteria, string archivoCadetes, Cadeteria miCadeteria, string extension)
@@ -97,15 +97,13 @@ public class AccesoJSON : AccesoADatos
 
         try
         {
-            // Lee y deserializa el archivo JSON de la cadetería
             string contenidoCadeteriaJson = File.ReadAllText(rutaArchivoCadeteria);
             miCadeteria = JsonSerializer.Deserialize<Cadeteria>(contenidoCadeteriaJson) ?? miCadeteria;
 
-            // Lee y deserializa el archivo JSON de los cadetes
             string contenidoCadetesJson = File.ReadAllText(rutaArchivoCadetes);
             List<Cadete> cadetes = JsonSerializer.Deserialize<List<Cadete>>(contenidoCadetesJson) ?? new List<Cadete>();
 
-            // Asigna los cadetes a la cadetería
+            // Asigno los cadetes a la cadetería
             miCadeteria.ListadoCadetes = cadetes;
         }
         catch (JsonException ex)

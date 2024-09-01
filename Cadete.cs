@@ -22,24 +22,5 @@ public class Cadete
     public string Direccion { get => direccion; set => direccion = value; }
     public string Telefono { get => telefono; set => telefono = value; }
 
-    public void AgregarPedido(Pedido pedido, Cadeteria miCadeteria)
-    {
-        miCadeteria.ListadoPedidos.Add(pedido);
-    }
-
-    public void EliminarPedido(Pedido pedido, Cadeteria miCadeteria)
-    {
-        miCadeteria.ListadoPedidos.Remove(pedido);
-    }
-
-    public int ObtenerPedidosTotales(Cadeteria miCadeteria)
-    {
-        return  miCadeteria.ListadoPedidos.Count();
-    }
-
-    public bool TienePedido(Pedido pedido, Cadeteria miCadeteria)
-    {
-        return miCadeteria.ListadoPedidos.Contains(pedido);
-    }
 }
 

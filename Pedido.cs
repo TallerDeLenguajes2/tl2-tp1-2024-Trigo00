@@ -21,20 +21,11 @@ public class Pedido
         EstadoPedido = estadoP;
     }
 
-    public string VerDireccionCliente(Cliente miCliente)
-    {
-        return miCliente.Direccion;
-    }
-
-    public string VerDatosCliente(Cliente miCliente)
-    {
-        return "Nombre: " + miCliente.Nombre + "\nDireccion: " + miCliente.Direccion + "\nTelefono: " + miCliente.Telefono + "\nReferencia: " + miCliente.DatosReferenciaDireccion;
-    }
-
     public enum Estado
     {
         Pendiente,
-        Entregado
+        Entregado,
+        NA
     }
 }
 
