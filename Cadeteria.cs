@@ -33,21 +33,30 @@ public class Cadeteria
         return contador * 500;
     }
 
-    public void AsignarPedidoACadete(Cadeteria miCadeteria, List<Pedido> pedidosSinAsignar)
+    public bool AsignarPedidoACadete(Cadeteria miCadeteria, List<Pedido> pedidosSinAsignar)
     {
-        
+        return RealizarAccion(miCadeteria, pedidosSinAsignar);
+    }
+
+    private bool RealizarAccion(Cadeteria miCadeteria, List<Pedido> pedidosSinAsignar)
+    {
+        /*
+        var cadeteElegido = cadetes.find(c = c.Id == idCadete);
+        var pedidoElegido = pedidos.find(p = p.Numero == numeroPedido);
+        if(cadeteElegido != null && pedidoElegido != null){
+            pedidoElegido.CadeteAsignado = cadeteElegido;
+            return true;
+        }
+        return false
+        */
         if (pedidosSinAsignar == null || pedidosSinAsignar.Count == 0)
         {
-            Console.WriteLine("No existen pedidos sin asignar");
+            return false;
         }
         else
         {
             foreach (var pedidoSA in pedidosSinAsignar)
             {
-                Console.WriteLine("\nInformacion del Pedido\n");
-                Console.WriteLine("Pedido Nro: " + pedidoSA.Nro);
-                Console.WriteLine("Observacion del Pedido: " + pedidoSA.Obs);
-                Console.WriteLine("");
 
                 Console.Write("Ingrese el ID del cadete al que se le asignará el pedido: ");
                 int idCadete = int.Parse(Console.ReadLine());
@@ -56,17 +65,17 @@ public class Cadeteria
                 if (cadete != null)
                 {
                     pedidoSA.CadeteAsignado = cadete;
-                    pedidoSA.EstadoPedido  = Pedido.Estado.Pendiente;
-                    Console.WriteLine("Pedido asignado exitosamente al cadete.");
+                    pedidoSA.EstadoPedido = Pedido.Estado.Pendiente;
+                    return true;
                 }
                 else
                 {
-                    Console.WriteLine("Cadete no encontrado.");
+                    return false;
                 }
             }
+            return false;
         }
     }
-
 }
 
 
