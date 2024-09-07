@@ -40,6 +40,15 @@ public class Cadeteria
 
     private bool RealizarAccion(Cadeteria miCadeteria, List<Pedido> pedidosSinAsignar)
     {
+        /*
+        var cadeteElegido = cadetes.find(c = c.Id == idCadete);
+        var pedidoElegido = pedidos.find(p = p.Numero == numeroPedido);
+        if(cadeteElegido != null && pedidoElegido != null){
+            pedidoElegido.CadeteAsignado = cadeteElegido;
+            return true;
+        }
+        return false
+        */
         if (pedidosSinAsignar == null || pedidosSinAsignar.Count == 0)
         {
             return false;
