@@ -44,14 +44,22 @@ public class GestionPedidos
                     return MostrarPedidosSinAsignar(miCadeteria.ListadoPedidos);
 
                 case "3":
-                    if (miCadeteria.AsignarPedidoACadete(miCadeteria, miCadeteria.ListadoPedidos))
+                    Pedido pedidoAAsignar = BuscarPedidoSA(miCadeteria);
+
+                    if (pedidoAAsignar != null)
                     {
-                        resultados.Add("Pedido agregado al cadete correctamente.");
+                        if (miCadeteria.AsignarPedidoACadete(pedidoAAsignar.Nro))
+                        {
+                            resultados.Add("Pedido agregado al cadete correctamente.");
+                        }
+                        else
+                        {
+                            resultados.Add("Ocurrio un error, no pudiste tomar el pedido");
+                        }
+                    }else{
+                        Console.WriteLine("No existen pedidos para asignar");
                     }
-                    else
-                    {
-                        resultados.Add("Ocurrio un error, no pudiste tomar el pedido");
-                    }
+
                     break;
 
                 case "4":
@@ -193,6 +201,18 @@ public class GestionPedidos
         foreach (var miPedido in miCadeteria.ListadoPedidos)
         {
             if (miPedido.Nro == idPedido)
+            {
+                return miPedido;
+            }
+        }
+        return null;
+    }
+
+    public static Pedido BuscarPedidoSA(Cadeteria miCadeteria)
+    {
+        foreach (var miPedido in miCadeteria.ListadoPedidos)
+        {
+            if (miPedido.EstadoPedido == Pedido.Estado.NA)
             {
                 return miPedido;
             }

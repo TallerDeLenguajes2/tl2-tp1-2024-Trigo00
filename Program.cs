@@ -1,9 +1,9 @@
 ﻿Console.WriteLine("1. CSV");
 Console.WriteLine("2. JSON");
-Console.Write("\nSeleccione el tipo de acceso a datos:");
+Console.Write("\nSeleccione el tipo de acceso a datos: ");
 string opcion = Console.ReadLine();
 
-AccesoADatos accesoDatos;
+IAccesoADatos accesoDatos;
 string extension;
 
 switch (opcion)
@@ -23,8 +23,18 @@ switch (opcion)
         break;
 }
 
-Cadeteria miCadeteria = new Cadeteria(); 
-miCadeteria = accesoDatos.CargarDatos("Cadeteria", "Cadete", miCadeteria, extension);
+string nombreArchivoCadeteria = $"Cadeteria{extension}";
+string nombreArchivoCadetes = $"Cadete{extension}";
 
-GestionPedidos gestion = new GestionPedidos(miCadeteria);
-gestion.MostrarMenu();
+if (accesoDatos.Existe(nombreArchivoCadeteria) && accesoDatos.Existe(nombreArchivoCadetes))
+{
+    Cadeteria miCadeteria = accesoDatos.CrearCadeteria(nombreArchivoCadeteria, nombreArchivoCadetes);
+
+    GestionPedidos gestion = new GestionPedidos(miCadeteria);
+    gestion.MostrarMenu();
+}
+else
+{
+    Console.WriteLine("Uno o ambos archivos no existen. Asegúrese de que los archivos estén en la carpeta correcta.");
+}
+

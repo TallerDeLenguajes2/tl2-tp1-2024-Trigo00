@@ -13,8 +13,11 @@ public class Cadeteria
     public List<Cadete> ListadoCadetes { get => listadoCadetes; set => listadoCadetes = value; }
     public List<Pedido> ListadoPedidos { get => listadoPedidos; set => listadoPedidos = value; }
 
-    public Cadeteria()
+    public Cadeteria(string nombre, string telefono, string direccion)
     {
+        Nombre = nombre;
+        Telefono = telefono;
+        Direccion = direccion;
         ListadoCadetes = new List<Cadete>();
         ListadoPedidos = new List<Pedido>();
     }
@@ -33,48 +36,24 @@ public class Cadeteria
         return contador * 500;
     }
 
-    public bool AsignarPedidoACadete(Cadeteria miCadeteria, List<Pedido> pedidosSinAsignar)
-    {
-        return RealizarAccion(miCadeteria, pedidosSinAsignar);
+    public bool AsignarPedidoACadete(int idPedido)
+    {  
+        Console.Write("Ingrese el ID del cadete al que se le asignará el pedido: ");
+        int idCadete = int.Parse(Console.ReadLine());
+        return RealizarAccion(idCadete, idPedido);
     }
 
-    private bool RealizarAccion(Cadeteria miCadeteria, List<Pedido> pedidosSinAsignar)
+    private bool RealizarAccion(int idCadete, int idPedido)
     {
-        /*
-        var cadeteElegido = cadetes.find(c = c.Id == idCadete);
-        var pedidoElegido = pedidos.find(p = p.Numero == numeroPedido);
+        
+        var cadeteElegido = listadoCadetes.Find(c => c.Id == idCadete);
+        var pedidoElegido = listadoPedidos.Find(p => p.Nro == idPedido);
         if(cadeteElegido != null && pedidoElegido != null){
             pedidoElegido.CadeteAsignado = cadeteElegido;
             return true;
         }
-        return false
-        */
-        if (pedidosSinAsignar == null || pedidosSinAsignar.Count == 0)
-        {
-            return false;
-        }
-        else
-        {
-            foreach (var pedidoSA in pedidosSinAsignar)
-            {
-
-                Console.Write("Ingrese el ID del cadete al que se le asignará el pedido: ");
-                int idCadete = int.Parse(Console.ReadLine());
-                Cadete cadete = miCadeteria.ListadoCadetes.FirstOrDefault(c => c.Id == idCadete);
-
-                if (cadete != null)
-                {
-                    pedidoSA.CadeteAsignado = cadete;
-                    pedidoSA.EstadoPedido = Pedido.Estado.Pendiente;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            return false;
-        }
+        return false;
+    
     }
 }
 
